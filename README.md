@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| 배포 URL | `https://______.vercel.app` (배포 후 기입) |
+| 배포 URL | https://no-one-can-know-the-soil.vercel.app |
 | GitHub | https://github.com/JSH-ama-web/Codyssey_Final |
 | CI | 저장소 Actions 탭 · `CI (lint + test)` |
 | 헬스체크 | `/api/health` |
