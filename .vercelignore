@@ -1,0 +1,15 @@
+.venv
+venv
+.env
+__pycache__
+*.pyc
+*.sqlite3
+.pytest_cache
+tests
+docs
+presentation
+Dockerfile
+Procfile
+render.yaml
+.github
+.DS_Store

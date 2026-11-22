@@ -1,0 +1,17 @@
+{
+  "name": "No one can know the soil.",
+  "short_name": "Know the soil",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#091426",
+  "theme_color": "#0c1b31",
+  "description": "토질시험 계산·보고서·시험 방법 가이드",
+  "icons": [
+    {
+      "src": "/static/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

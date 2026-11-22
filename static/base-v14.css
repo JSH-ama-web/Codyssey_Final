@@ -1,0 +1,2 @@
+@charset "UTF-8";
+:root{font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:#17354b;background:#f5f8fc;font-synthesis:none}*,*::before,*::after{box-sizing:border-box}html{font-size:16px}body{margin:0;background:#f5f8fc;color:#17354b;font-family:inherit;line-height:1.55}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}img,svg{max-width:100%}h1,h2,h3,p{overflow-wrap:break-word}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #09a7ad;outline-offset:3px}

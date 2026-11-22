@@ -1,0 +1,1 @@
+"""GeoSoil AI application."""
