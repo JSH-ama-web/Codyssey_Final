@@ -87,3 +87,12 @@ def test_gateway_failure_is_logged_and_falls_back(monkeypatch, caplog):
     monkeypatch.setenv('AI_TIMEOUT', '2')
     exp = client.post('/api/analyze', json=WATER).json()['explanation']
     assert exp['mode'] == 'rules+local-rag-fallback' and 'warning' in exp
+
+
+def test_markdown_answer_is_converted_to_plain_text():
+    from app.agent import to_plain_text
+
+    md = '# 함수비 해석\n\n## 1. 관찰 결과\n**측정값**: 20%\n- 중간 습윤\n---\n| 항목 | 필요 정보 |\n|---|---|\n| 압축성 | e0 |'
+    out = to_plain_text(md)
+    assert '#' not in out and '**' not in out and '---' not in out
+    assert '[함수비 해석]' in out and '• 중간 습윤' in out and '• 압축성 / e0' in out
