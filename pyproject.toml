@@ -1,0 +1,28 @@
+[project]
+name = "no-one-can-know-the-soil"
+version = "14.1.0"
+description = "교육용 토질시험 원자료 계산 및 공학적 해석 Agent (FastAPI + 코디세이 AI Gateway)"
+requires-python = ">=3.11"
+
+# ── 코드 스타일 / 정적 분석: ruff (formatter + linter) ──────────────
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = [".venv", "venv", "presentation", "docs"]
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: import 정렬, B: bugbear, UP: 최신 문법
+select = ["E", "W", "F", "I", "B", "UP"]
+# E501: 한국어 안내 문구·지식 베이스 문자열이 길어 줄 길이는 formatter에 맡김
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"api/index.py" = ["E402"]
+"tests/*" = ["B"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

@@ -1,0 +1,21 @@
+name: Uptime check
+# 배포 서비스가 살아 있는지 6시간마다 /api/health 를 호출해 기록한다.
+# 저장소 Settings → Secrets and variables → Actions → Variables 에 DEPLOY_URL 을 등록해야 동작한다.
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Health check
+        env:
+          DEPLOY_URL: ${{ vars.DEPLOY_URL }}
+        run: |
+          if [ -z "$DEPLOY_URL" ]; then echo "DEPLOY_URL 변수가 없어 건너뜀"; exit 0; fi
+          start=$(date +%s%3N)
+          body=$(curl -fsS --max-time 30 "$DEPLOY_URL/api/health")
+          echo "응답시간: $(( $(date +%s%3N) - start )) ms"
+          echo "$body"
+          echo "$body" | grep -q '"status":"ok"'

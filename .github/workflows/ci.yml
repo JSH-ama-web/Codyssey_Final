@@ -1,5 +1,7 @@
-name: Python tests
-on: [push, pull_request]
+name: CI (lint + test)
+on:
+  push:
+  pull_request:
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -8,5 +10,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: pip
       - run: pip install -r requirements-dev.txt
-      - run: pytest -q
+      - name: Ruff (코드 스타일·정적 분석)
+        run: |
+          ruff format --check app api tests
+          ruff check app api tests
+      - name: Pytest
+        run: pytest -v --junitxml=pytest-report.xml | tee pytest.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-report
+          path: |
+            pytest.log
+            pytest-report.xml

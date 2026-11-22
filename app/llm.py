@@ -9,6 +9,7 @@
   AI_MAX_TOKENS : 응답 최대 토큰, 기본 1200
   AI_TIMEOUT    : 요청 제한 시간(초), 기본 40
 """
+
 from __future__ import annotations
 
 import logging
@@ -46,8 +47,12 @@ def is_configured() -> bool:
 def public_config() -> dict:
     """키 값은 노출하지 않는 진단용 정보 (/api/health)."""
     s = settings()
-    return {'api_key_set': bool(s['api_key']), 'base_url': s['base_url'], 'model': s['model'],
-            'format': s['format'] or f"auto({_resolved_format or 'anthropic'})"}
+    return {
+        'api_key_set': bool(s['api_key']),
+        'base_url': s['base_url'],
+        'model': s['model'],
+        'format': s['format'] or f'auto({_resolved_format or "anthropic"})',
+    }
 
 
 def _url(base: str, path: str) -> str:
@@ -58,20 +63,33 @@ def _url(base: str, path: str) -> str:
 
 
 async def _anthropic(client: httpx.AsyncClient, s: dict, system: str, user: str, temperature: float) -> str:
-    res = await client.post(_url(s['base_url'], '/v1/messages'),
+    res = await client.post(
+        _url(s['base_url'], '/v1/messages'),
         headers={'x-api-key': s['api_key'], 'anthropic-version': '2023-06-01', 'content-type': 'application/json'},
-        json={'model': s['model'], 'max_tokens': s['max_tokens'], 'temperature': temperature,
-              'system': system, 'messages': [{'role': 'user', 'content': user}]})
+        json={
+            'model': s['model'],
+            'max_tokens': s['max_tokens'],
+            'temperature': temperature,
+            'system': system,
+            'messages': [{'role': 'user', 'content': user}],
+        },
+    )
     res.raise_for_status()
     blocks = res.json().get('content', [])
     return ''.join(b.get('text', '') for b in blocks if b.get('type') == 'text').strip()
 
 
 async def _openai(client: httpx.AsyncClient, s: dict, system: str, user: str, temperature: float) -> str:
-    res = await client.post(_url(s['base_url'], '/v1/chat/completions'),
-        headers={'Authorization': f"Bearer {s['api_key']}", 'content-type': 'application/json'},
-        json={'model': s['model'], 'max_tokens': s['max_tokens'], 'temperature': temperature,
-              'messages': [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}]})
+    res = await client.post(
+        _url(s['base_url'], '/v1/chat/completions'),
+        headers={'Authorization': f'Bearer {s["api_key"]}', 'content-type': 'application/json'},
+        json={
+            'model': s['model'],
+            'max_tokens': s['max_tokens'],
+            'temperature': temperature,
+            'messages': [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}],
+        },
+    )
     res.raise_for_status()
     return (res.json()['choices'][0]['message'].get('content') or '').strip()
 
