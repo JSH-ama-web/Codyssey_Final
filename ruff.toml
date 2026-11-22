@@ -1,0 +1,18 @@
+# 코드 스타일 / 정적 분석 설정 (ruff formatter + linter)
+# pyproject.toml을 두면 Vercel이 requirements.txt 대신 그 파일로 의존성을 설치하므로 별도 파일로 분리한다.
+line-length = 120
+target-version = "py311"
+extend-exclude = [".venv", "venv", "presentation", "docs"]
+
+[lint]
+# E/W: pycodestyle, F: pyflakes, I: import 정렬, B: bugbear, UP: 최신 문법
+select = ["E", "W", "F", "I", "B", "UP"]
+# E501: 한국어 안내 문구·지식 베이스 문자열이 길어 줄 길이는 formatter에 맡김
+ignore = ["E501"]
+
+[lint.per-file-ignores]
+"api/index.py" = ["E402"]
+"tests/*" = ["B"]
+
+[format]
+quote-style = "single"
