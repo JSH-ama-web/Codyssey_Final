@@ -25,7 +25,7 @@ cp .env.example .env   # AI_API_KEY 에 코디세이 콘솔 키 입력
 python3 -m uvicorn app.main:app --reload --port 8001 --env-file .env
 ```
 
-브라우저에서 [http://127.0.0.1:8001/](https://no-one-can-know-the-soil.vercel.app) 로 접속합니다. `/studio`는 메인 홈이 아닙니다.
+브라우저에서 https://no-one-can-know-the-soil.vercel.app 로 접속합니다. `/studio`는 메인 홈이 아닙니다.
 
 ## 저장과 삭제
 
