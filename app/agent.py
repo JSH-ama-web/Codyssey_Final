@@ -1,5 +1,7 @@
 """Transparent tool-routing agent and small local retrieval knowledge base."""
 
+import re
+
 from .engineering import (
     compaction,
     compaction_raw,
@@ -107,6 +109,29 @@ def route(task, payload):
     raise ValueError('지원하지 않는 분석 작업입니다.')
 
 
+def to_plain_text(text: str) -> str:
+    """화면은 textContent로 렌더링하므로 AI가 섞어 보낸 마크다운 기호를 일반 텍스트로 정리한다."""
+    lines = []
+    for raw in (text or '').splitlines():
+        line = raw.rstrip()
+        stripped = line.strip()
+        if re.fullmatch(r'[-*_=]{3,}', stripped) or re.fullmatch(r'\|?\s*:?-{2,}.*', stripped):
+            continue  # 구분선, 표 머리 구분선
+        heading = re.match(r'^#{1,6}\s+(.*)', stripped)
+        if heading:
+            title = heading.group(1).strip()
+            line = title if title.startswith('[') else f'[{title}]'
+        elif stripped.startswith('|') and stripped.endswith('|'):
+            cells = [c.strip() for c in stripped.strip('|').split('|')]
+            line = '• ' + ' / '.join(c for c in cells if c)
+        else:
+            line = re.sub(r'^(\s*)[-*]\s+', r'\1• ', line)
+        line = re.sub(r'\*\*(.+?)\*\*', r'\1', line)
+        line = re.sub(r'`([^`]+)`', r'\1', line)
+        lines.append(line)
+    return re.sub(r'\n{3,}', '\n\n', '\n'.join(lines)).strip()
+
+
 async def explain(task, result, question):
     import json
 
@@ -176,11 +201,12 @@ async def explain(task, result, question):
         return {'mode': 'rules+local-rag', 'answer': fallback, 'sources': docs}
     system = (
         '당신은 토질공학 교육용 해설 Agent다. 계산 결과를 변경하거나 숫자를 지어내지 마라. 한국어로 관찰 결과, 가능한 지반 거동, 시공시 확인 사항, 보완 시험, 해석 한계를 구분해 설명하라. '
-        '보고서 초안은 작성하지 마라. 투수성·압축성·지지력·침하·안전율을 시험 없이 확정하지 마라. 출처가 없으면 추측하지 마라.'
+        '보고서 초안은 작성하지 마라. 투수성·압축성·지지력·침하·안전율을 시험 없이 확정하지 마라. 출처가 없으면 추측하지 마라. '
+        '출력은 일반 텍스트로만 작성한다. 마크다운(#, **, 표, ---)을 쓰지 말고 [관찰 결과] 같은 대괄호 소제목과 • 목록만 사용하라. 600자 안팎으로 간결하게 써라.'
     )
     user = json.dumps({'task': task, 'result': result, 'question': question, 'retrieved': docs}, ensure_ascii=False)
     try:
-        answer = await llm.complete(system, user, temperature=0.1)
+        answer = to_plain_text(await llm.complete(system, user, temperature=0.1))
         return {'mode': 'codyssey-ai+local-rag', 'answer': answer or fallback, 'sources': docs}
     except llm.LLMError as exc:
         log_event('ai_fallback', task=task, reason=str(exc))
