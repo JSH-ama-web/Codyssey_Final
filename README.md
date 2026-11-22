@@ -1,3 +1,35 @@
+# No one can know the soil. · v14.1
+
+토질시험 원자료를 계산하고 USCS 흙 분류와 공학적 해석을 제공하는 교육용 Agent (FastAPI + 코디세이 AI Gateway, Vercel 배포).
+
+| | |
+|---|---|
+| 배포 URL | `https://______.vercel.app` (배포 후 기입) |
+| GitHub | https://github.com/JSH-ama-web/Codyssey_Final |
+| CI | 저장소 Actions 탭 · `CI (lint + test)` |
+| 헬스체크 | `/api/health` |
+
+## 문서
+- [01 프로젝트 기획서](docs/01_프로젝트_기획서.md) · [02 기능 요구 명세](docs/02_기능_요구_명세서.md) · [03 시스템 아키텍처](docs/03_시스템_아키텍처.md)
+- [04 사용자 테스트 및 피드백](docs/04_사용자_테스트_및_피드백.md)
+- [13 실행 검증 및 테스트 로그](docs/13_실행_검증_및_테스트_로그.md) · [14 운영 모니터링 및 오류 로그](docs/14_운영_모니터링_및_오류_로그.md) · [15 개발 프로세스 및 기여](docs/15_개발_프로세스_및_기여.md)
+
+## 개발 명령
+```bash
+pip install -r requirements-dev.txt
+ruff format app api tests && ruff check app api tests   # 코드 스타일·정적 분석
+pytest -v                                               # 45개 테스트
+```
+
+## v14.1 변경
+- AI 해설을 OpenAI SDK에서 코디세이 AI Gateway로 변경 (`app/llm.py`)
+- Vercel 서버리스 배포 구성 (`api/index.py`, `vercel.json`)
+- 요청 로그·오류 추적·헬스체크 (`app/observability.py`, `X-Request-ID`)
+- ruff 코드 스타일 적용 및 CI(ruff + pytest), 6시간 주기 가동 점검 워크플로
+- PR·이슈 템플릿, 개발 프로세스 문서
+
+---
+
 # No one can know the soil. v14 · UI repair
 
 **v13 화면 오류 수정판.** 홈 배너 아이콘 SVG 내장, 모든 페이지 공통 기본 CSS 적용, 대시보드의 구형 `/lab` 링크를 `/studio`로 변경했습니다.
