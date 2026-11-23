@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 _DEFAULT_DB = '/tmp/geosoil.sqlite3' if os.getenv('VERCEL') else str(ROOT / 'geosoil.sqlite3')
 DB = Path(os.getenv('DATABASE_PATH') or _DEFAULT_DB)
 app = FastAPI(
-    title='No one can know the soil.', version='14.1.0', description='교육용 토질시험 원자료 계산 및 공학적 해석 Agent'
+    title='No one can know the soil.', version='14.2.0', description='교육용 토질시험 원자료 계산 및 공학적 해석 Agent'
 )
 observability.install(app)
 app.mount('/static', StaticFiles(directory=ROOT / 'static'), name='static')
@@ -102,7 +102,7 @@ def sw():
 def health():
     return {
         'status': 'ok',
-        'version': '14.1.0',
+        'version': '14.2.0',
         'ai_configured': llm.is_configured(),
         'ai': llm.public_config(),
         'runtime': observability.uptime_info(),

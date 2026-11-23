@@ -165,7 +165,8 @@ async def explain(task, result, question):
         'cohesion_kpa': '점착력',
         'friction_angle_deg': '내부마찰각',
         'qu_kpa': '일축압축강도',
-        'max_ru': '최대 과잉간극수압비',
+        'max_ru': '최대 과잉간극수압비 ru',
+        'liquefaction_judgement': '액상화 판정 (ru≥1.0)',
         'fines_pct': '세립분 비율',
     }
     units = {

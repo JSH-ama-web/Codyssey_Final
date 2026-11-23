@@ -31,4 +31,4 @@ def test_navigation_and_assets():
     dash = c.get('/dashboard').text
     assert '/lab#' not in dash
     assert '/studio?test=limits_workflow' in dash
-    assert c.get('/api/health').json()['version'] == '14.1.0'
+    assert c.get('/api/health').json()['version'] == '14.2.0'
