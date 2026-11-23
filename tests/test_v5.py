@@ -51,7 +51,7 @@ def test_api_and_pages():
     client = TestClient(app)
     assert client.get('/lab').status_code == 404
     assert client.get('/dashboard').status_code == 200
-    assert client.get('/api/health').json()['version'] == '14.1.0'
+    assert client.get('/api/health').json()['version'] == '14.2.0'
     r = client.post(
         '/api/analyze', json={'task': 'paired_compaction', 'payload': {'rows': paired_rows(), 'mold_volume_cm3': 1000}}
     )

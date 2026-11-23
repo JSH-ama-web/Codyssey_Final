@@ -21,4 +21,4 @@ def test_new_navigation_and_assets():
     assert '시험 방법' in home and '기록 대시보드' in home and '시료 목록' in home
     assert 'href="/studio?test=paired_compaction"' in home
     assert '시료별 통합 분석' in c.get('/samples').text
-    assert '14.1.0' == c.get('/api/health').json()['version']
+    assert '14.2.0' == c.get('/api/health').json()['version']

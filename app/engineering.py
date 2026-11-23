@@ -423,12 +423,21 @@ def liquefaction_cycles(rows, initial_effective_stress_kpa):
     ]
     if any(p['ru'] > 1.1 for p in pts):
         warnings.append('ru가 1을 크게 초과합니다. 센서 기준점과 초기 유효응력 설정을 확인하세요.')
+    triggered = threshold is not None
+    max_ru = round(max(p['ru'] for p in pts), 5)
+    judgement = f'발생 ({threshold}회에서 ru≥1.0 도달)' if triggered else f'미발생 (최대 ru={max_ru}, 1.0 미도달)'
     return {
         'points': pts,
-        'max_ru': round(max(p['ru'] for p in pts), 5),
+        'liquefaction_judgement': judgement,
+        'liquefaction_triggered': triggered,
         'first_ru_ge_1_cycle': threshold,
+        'liquefaction_criterion_ru': 1.0,
+        'max_ru': max_ru,
+        'ru_definition': 'ru = Δu / σ′0 (각 반복횟수에서 측정한 과잉간극수압 증가량 ÷ 초기 유효구속응력)',
         'warnings': warnings,
-        'note': '반복하중에 따른 과잉간극수압비 ru=Δu/σ′0의 교육용 시각화입니다. 액상화 저항 및 현장 위험도를 판정하는 기능이 아닙니다.',
+        'note': '반복하중 시험의 과잉간극수압비 ru=Δu/σ′0를 반복횟수마다 계산하고, ru≥1.0(초기 유효응력 소실) 도달 여부로 '
+        '시험 시료의 액상화 발생을 판정합니다. 기준을 ru≥0.95나 양진폭 변형률 5%로 두는 경우도 있으므로 시험 기준을 확인하세요. '
+        '현장 액상화 위험도(CSR/CRR, 안전율)를 판정하는 기능은 아닙니다.',
     }
 
 
