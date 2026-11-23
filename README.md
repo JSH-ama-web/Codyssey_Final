@@ -1,4 +1,4 @@
-# No one can know the soil. · v14.1
+# No one can know the soil. · v14.2
 
 토질시험 원자료를 계산하고 USCS 흙 분류와 공학적 해석을 제공하는 교육용 Agent (FastAPI + 코디세이 AI Gateway, Vercel 배포).
 
@@ -20,6 +20,13 @@ pip install -r requirements-dev.txt
 ruff format app api tests && ruff check app api tests   # 코드 스타일·정적 분석
 pytest -v                                               # 45개 테스트
 ```
+
+## v14.2 변경 (사용자 테스트 피드백 반영)
+- 5명 실사용자 테스트 결과 정리 (`docs/04`, 평균 4.56/5)
+- 그래프 세로축 이름·단위, 시험별 그래프 설명, 통과율 축 0~100% (#4)
+- AI 응답 대기 중 탭을 바꾸면 결과가 다른 시험에 저장되던 버그 수정 (#5)
+- 시료 목록 '시험별 핵심 결과 요약' 표와 CSV 내보내기 (#6)
+- 액상화 판정(ru≥1.0)·도달 반복횟수·ru 정의 표시, ru=1.0 기준선 (#7)
 
 ## v14.1 변경
 - AI 해설을 OpenAI SDK에서 코디세이 AI Gateway로 변경 (`app/llm.py`)
